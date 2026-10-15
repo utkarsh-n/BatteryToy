@@ -1,0 +1,66 @@
+name: BatteryToy
+options:
+  bundleIdPrefix: com.utkarsh
+  deploymentTarget:
+    iOS: '27.0'
+  createIntermediateGroups: true
+settings:
+  base:
+    SWIFT_VERSION: '6.0'
+    MARKETING_VERSION: '0.1.0'
+    CURRENT_PROJECT_VERSION: '2'
+    DEVELOPMENT_TEAM: ""
+    CODE_SIGN_STYLE: Automatic
+targets:
+  BatteryCore:
+    type: framework
+    platform: iOS
+    sources: [Sources/BatteryCore]
+    settings:
+      base:
+        GENERATE_INFOPLIST_FILE: YES
+        PRODUCT_BUNDLE_IDENTIFIER: com.utkarsh.batterytoy.core
+  BatteryToy:
+    type: application
+    platform: iOS
+    sources: [App]
+    dependencies:
+      - target: BatteryCore
+    info:
+      path: App/Info.plist
+      properties:
+        CFBundleDisplayName: Battery Toy
+        CFBundleShortVersionString: $(MARKETING_VERSION)
+        CFBundleVersion: $(CURRENT_PROJECT_VERSION)
+        UILaunchScreen: {}
+        NSMotionUsageDescription: Tilt your iPhone to move the light across the holographic battery.
+        UISupportedInterfaceOrientations:
+          - UIInterfaceOrientationPortrait
+          - UIInterfaceOrientationLandscapeLeft
+          - UIInterfaceOrientationLandscapeRight
+        ITSAppUsesNonExemptEncryption: false
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: com.utkarsh.batterytoy
+        TARGETED_DEVICE_FAMILY: '1'
+        SUPPORTS_MACCATALYST: NO
+        SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD: NO
+        SUPPORTS_XR_DESIGNED_FOR_IPHONE_IPAD: NO
+        ASSETCATALOG_COMPILER_APPICON_NAME: AppIcon
+  BatteryToyUITests:
+    type: bundle.ui-testing
+    platform: iOS
+    sources: [Tests/NativeSmokeTests]
+    dependencies:
+      - target: BatteryToy
+    settings:
+      base:
+        GENERATE_INFOPLIST_FILE: YES
+        PRODUCT_BUNDLE_IDENTIFIER: com.utkarsh.batterytoy.uitests
+schemes:
+  BatteryToy:
+    build:
+      targets:
+        BatteryToy: all
+    test:
+      targets: [BatteryToyUITests]
